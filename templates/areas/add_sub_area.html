@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <h1>Criar seção</h1>
+        <h2>Area: {{area}}</h2>
+        <form action="/add_sub_area/{{area}}" method="post">
+            <label for="Name">Nome</label>
+            <input name="Name" id="Name" type="text" required>
+            <br>
+            <br>
+            <label for="Description">Descrição</label>
+            <input name="Description" id="Description" type="text" >
+            <br>
+            <br>
+            <label for="Aditional">Observações</label>
+            <input name="Aditional" id="Aditional" type="text" >
+            <br>
+            <br>
+            <br>
+            <br>
+            <button type="submit">Criar</button>
+        </form>
+        <br>
+        <a href="/">index</a>
+        <br>
+        <a href="/logout"> Sair</a>
+</body>
+</html>

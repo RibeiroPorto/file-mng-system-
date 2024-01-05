@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <h1>CRiar Usuario</h1>
+        <form action="/register" method="post">
+            <label for="username">Nome</label>
+            <input name="username" id="username" type="text" required>
+            <br>
+            <br>
+            <label for="password">Senha</label>
+            <input name="password" id="password" type="password" required>
+            <br>
+            <label for="role">Cargo</label>
+            <select name="role" id="role">
+                <option value="Manager">Manager</option>
+                <option value="Regular">Regular</option>
+                <option value="Viewer">Viewer</option>
+            </select>
+            <br>
+            <br>
+            <button type="submit">Criar</button>
+        </form>
+        <br><br>
+        <a href="/">Index</a>
+        <br>
+        <a href="/view_users">Ver Usuarios</a>
+        <br>
+        <a href="/login">Login</a>
+</body>
+</html>

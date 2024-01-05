@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <h1>Editar Area</h1>
+        <form action="/edit_area/{{ area[0] }}" method="post">
+            <label for="Name">Nome</label>
+            <input name="Name" id="Name" type="text" value="{{area[1]}}" required>
+            <br>
+            <br>
+            <label for="Description" >Descrição</label>
+            <input name="Description" id="Description" type="text"  value="{{area[2]}}" >
+            <br>
+            <br>
+            <label for="Aditional" >Observações</label>
+            <input name="Aditional" id="Aditional" type="text"  value="{{area[3]}}" >
+            <br>
+            
+            <br>
+            <br>
+            <button type="submit">editar</button>
+        </form>
+        <!-- <a href="/">Index</a> -->
+</body>
+</html>

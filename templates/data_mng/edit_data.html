@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+        <h1>Area:{{area}}</h1>
+        <form action="/edit_sub_area/{{area}}/{{ subarea[1] }}" method="post">
+            <label for="Name">Nome</label>
+            <input name="Name" id="Name" type="text" value="{{subarea[1]}}" required>
+            <br>
+            <br>
+            <label for="Description" >Descrição</label>
+            <input name="Description" id="Description" type="text"  value="{{subarea[2]}}" >
+            <br>
+            <br>
+            <label for="file">Select a file:</label>
+            <input type="file" name="file" id="file">
+            <br>
+            
+            <br>
+            <br>
+            <button type="submit">editar</button>
+        </form>
+        <a href="/">Index</a>
+</body>
+</html>

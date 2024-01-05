@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+</head>
+<body>
+    <h2>Area: {{area[1]}}</h2>
+    <h2>Descrição: {{area[2]}}</h2>
+    <br>
+    <h3>Seções</h3>
+    {% for subarea in subareas %}
+            <li>
+               <a href="/view_sub_area/{{area[1]}}/{{subarea[1]}}">{{ subarea[1] }}</a>  - {{ subarea[2] }} - {{ subarea[3] }}
+                <a href="/edit_sub_area/{{area[1]}}/{{subarea[1]}}">Edit</a>
+                <form action="/delete_sub_area/{{area[1]}}/{{subarea[1]}}" method="post" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Are you sure you want to delete this USer?')">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+            <br>
+    <a href="/add_sub_area/{{area[1]}}">Criar seção</a>
+    <br>
+    <br><br>
+    <a href="/">index</a>
+    <br>
+    <a href="/logout"> Sair</a>
+</body>
+</html>
