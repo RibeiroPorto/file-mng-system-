@@ -542,6 +542,13 @@ class FlaskApp:
         print(name)
         return send_from_directory(f"{getcwd()}\\temp\\",name)
     
+
+class User:
+    def __init__(self, username, password, role):
+        self.username = username
+        self.password = password
+        self.role = role
+
 if __name__ == '__main__':
     #app()
     print('\x1b[6;30;42m' +f"inicio"+'\x1b[0m')
