@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, send_file, send_from_directory, render_template_string
 import sqlite3
 from os import rename , remove, makedirs, getcwd
 from config.KEY import key
@@ -303,6 +303,8 @@ class FlaskApp:
         self.user_manager = UserManagement()
         self.area_management = AreasManagement()
         self.eachArea = EAchAreaManagemnet()
+
+        
     def setup_routes(self):
         self.app.add_url_rule('/','index',self.index)
 
@@ -321,18 +323,17 @@ class FlaskApp:
         self.app.add_url_rule('/view_area/<int:area_id>','view_area',self.viewArea, methods=['GET', 'POST'])
 
         #Sub area routes
-        self.app.add_url_rule('/add_sub_area/<string:area>/','add_sub_area',self.AddSubArea, methods=['GET', 'POST'])
-        self.app.add_url_rule('/delete_sub_area/<string:area>/<string:subarea>','delete_sub_area',self.deleteSubArea, methods=['GET', 'POST'])
-        self.app.add_url_rule('/edit_sub_area/<string:area>/<string:subarea>','edit_sub_area',self.editeSubArea, methods=['GET', 'POST'])
+        self.app.add_url_rule('/add_sub_area','add_sub_area',self.AddSubArea, methods=['GET', 'POST'])
+        self.app.add_url_rule('/delete_sub_area/<string:subarea>','delete_sub_area',self.deleteSubArea, methods=['GET', 'POST'])
+        self.app.add_url_rule('/edit_sub_area/<string:subarea>','edit_sub_area',self.editeSubArea, methods=['GET', 'POST'])
 
         #data routes
-        self.app.add_url_rule('/view_sub_area/<string:area>/<string:sub_area>','view_sub_area',self.view_sub_area, methods=['GET', 'POST'])
-        self.app.add_url_rule('/add_data/<string:area>/<string:sub_area>','add_data',self.add_data, methods=['GET', 'POST'])
-        self.app.add_url_rule('/download/<string:area>/<string:sub_area>/<string:name>','download',self.download_data, methods=['GET', 'POST'])
-        self.app.add_url_rule('/delete/<string:area>/<string:sub_area>/<string:name>','delete',self.delete_data, methods=['GET', 'POST'])
+        self.app.add_url_rule('/view_sub_area/<string:sub_area>','view_sub_area',self.view_sub_area, methods=['GET', 'POST'])
+        self.app.add_url_rule('/add_data','add_data',self.add_data, methods=['GET', 'POST'])
+        self.app.add_url_rule('/download/<string:name>','download',self.download_data, methods=['GET', 'POST'])
+        self.app.add_url_rule('/delete/<string:name>','delete',self.delete_data, methods=['GET', 'POST'])
         self.app.add_url_rule('/display_image/<string:area>/<string:image>','display_image',self.display_image, methods=['GET', 'POST'])
         self.app.add_url_rule('/show_image/<string:name>','show_image',self.show_image, methods=['GET', 'POST'])
-
     #pages
     def index(self):
         if 'username' not in session:
@@ -379,6 +380,8 @@ class FlaskApp:
             if self.user_manager.authenticate(username, password)[0]:
                 session['username'] = username
                 session['role'] = self.user_manager.authenticate(username, password)[1]
+                
+
                 return redirect(url_for('index'))
             else:
                 print('Invalid Credentials')
@@ -388,7 +391,7 @@ class FlaskApp:
         session.pop('username', None)
         session.pop('role', None)
         return redirect(url_for('login'))
-    
+
     def AddArea(self):
         if 'role' in session and session['role'] != "Manager":
             return redirect(url_for('index'))
@@ -431,68 +434,73 @@ class FlaskApp:
         if 'role' in session and session['role'] !="Manager":
             return redirect(url_for('index'))
         
-        print("\n\n\n OK \n\n\n")
+        
         area = self.area_management.showarea(area_id)
+        session['current_area']= area
         subareas=self.eachArea.showAll(area[1])
+        
         return render_template('areas/view_area.html',area=area,subareas=subareas) 
-    def AddSubArea(self, area):
+    def AddSubArea(self):
         if 'role' in session and session['role'] != "Manager":
             return redirect(url_for('index'))
+        area_name=session['current_area'][1]
         if request.method == 'POST':
             Name = request.form['Name']
             Description = request.form['Description']
             Aditional = request.form['Aditional']
             print((Name, Description, Aditional))
-            self.eachArea.add_sub_area(area, Name, Description, Aditional)
+            self.eachArea.add_sub_area(area_name, Name, Description, Aditional)
 
             #Criar DB para area
             #self.eachArea.criar_db(Name)
-            lista=self.eachArea.showAlltables(area)
+            lista=self.eachArea.showAlltables(area_name)
             
-        print(area)
-        return render_template('areas/add_sub_area.html', area=area)
-    def deleteSubArea(self,area,subarea):
-        print('\x1b[6;30;42m' +f"\n{area}{subarea}\n"+'\x1b[0m')
+        return render_template('areas/add_sub_area.html', area=area_name)
+    def deleteSubArea(self,subarea):
+        
         if 'role' in session and session['role'] !="Manager":
             return redirect(url_for('index'))
+        area_name=session['current_area'][1]
         if request.method == 'POST':
         
-            self.eachArea.delete_sub_area(area,subarea)
-            print('\x1b[6;30;42m' +f"\n{area}{subarea}\n"+'\x1b[0m')
+            self.eachArea.delete_sub_area(area_name,subarea)
+            
             return redirect(url_for('index'))
-    def editeSubArea(self,area,subarea):
+    def editeSubArea(self,subarea):
         if 'role' in session and session['role'] !="Manager":
             return redirect(url_for('index'))
+        area_name=session['current_area'][1]
         if request.method == 'POST':
             Name = request.form['Name']
             Description = request.form['Description']
             Aditional = request.form['Aditional']
             print((Name, Description, Aditional))
-            sub_area = self.eachArea.showSubArea(area,subarea)
-            self.eachArea.edit_sub_area(area,sub_area[0],Name, Description, Aditional)
+            sub_area = self.eachArea.showSubArea(area_name,subarea)
+            self.eachArea.edit_sub_area(area_name,sub_area[0],Name, Description, Aditional)
 
             
-            self.eachArea.rename_main_table(area,"temp",Name)
+            self.eachArea.rename_main_table(area_name,"temp",Name)
             return redirect(url_for('index')) 
         else:
             #area = self.area_management.showarea(area)
             
-            self.eachArea.rename_main_table(area,subarea,"temp")
-            sub_area = self.eachArea.showSubArea(area,subarea) 
-            return render_template('areas/edit_sub_area.html',area=area,subarea=sub_area) 
-    
-    def view_sub_area(self,area,sub_area):
+            self.eachArea.rename_main_table(area_name,subarea,"temp")
+            sub_area = self.eachArea.showSubArea(area_name,subarea) 
+            return render_template('areas/edit_sub_area.html',area=area_name,subarea=sub_area)     
+    def view_sub_area(self,sub_area):
         if 'role' in session and session['role'] !="Manager":
             return redirect(url_for('index'))
-        
-        
+        area_name=session['current_area'][1]
+        subarea= self.eachArea.showSubArea(area_name,sub_area)
+        session['current_sub_area']= subarea
         #area = self.area_management.showarea(area_id)
-        datas=self.eachArea.showData(area,sub_area)
-        return render_template('data_mng/view_sub_area.html',area=area,subarea=sub_area,datas=datas) 
-    
-    def add_data(self,area,sub_area):
+        datas=self.eachArea.showData(area_name,sub_area)
+        return render_template('data_mng/view_sub_area.html',area=area_name,subarea=sub_area,datas=datas) 
+    def add_data(self):
         if 'role' in session and session['role'] != "Manager":
             return redirect(url_for('index'))
+        area_name = session['current_area'][1]
+        sub_area_name = session['current_sub_area'][1]
         if request.method == 'POST':
             
             Description = request.form['Description']
@@ -502,16 +510,18 @@ class FlaskApp:
             filetype= file.content_type
             filecontent=  file.read()
             
-            self.eachArea.addData(area,sub_area,filename,Description, filetype, filecontent)
-            print('\x1b[6;30;42m' +f"\n\n"+'\x1b[0m')
+            self.eachArea.addData(area_name,sub_area_name ,filename,Description, filetype, filecontent)
+            print('\x1b[6;30;42m' +f"\nOLA OLA\n"+'\x1b[0m')
 
 
         
-        return render_template('data_mng/add_data.html', area=area,sub_area=sub_area)
-    def download_data(self,area,sub_area,name):
+        return render_template('data_mng/add_data.html', area=area_name,sub_area=sub_area_name)
+    def download_data(self,name):
         if 'role' in session and session['role'] != "Manager":
             return redirect(url_for('index'))
-        data = self.eachArea.extractData(area,sub_area,name)
+        area_name=session['current_area'][1]
+        sub_area_name=session['current_sub_area'][1]
+        data = self.eachArea.extractData(area_name,sub_area_name,name)
         cd=getcwd()
         try:
             makedirs(f'{cd}/temp')
@@ -523,34 +533,33 @@ class FlaskApp:
             print('arquivo salvo')
         #params={'area':area,'image':f"temp/{data[1]}"}
 
-        return self.display_image(area,f"{data[1]}")
+        return self.display_image(area_name,f"{data[1]}")
         #return redirect(url_for('display_image',**params))
     
         #return send_file(f"{cd}/temp/{data[1]}",as_attachment=True)
-    
-    def delete_data(self,area,sub_area,name):
-        self.eachArea.delete(area,sub_area,name)
-        params={'area':area,'sub_area':sub_area}
+    def delete_data(self,name):
+        area_name=session['current_area'][1]
+        sub_area_name=session['current_sub_area'][1]
+        self.eachArea.delete(area_name,sub_area_name,name)
+        params={'area':area_name,'sub_area':sub_area_name}
         return redirect(url_for(f'view_sub_area',**params))
     
     def display_image(self,area,image):
-
-        return render_template(f'/data_mng/view_image.html',area=area,image=image)
-    
+        area_name=session['current_area'][1]
+        
+        return render_template(f'/data_mng/view_image.html',area=area_name,image=image)
     def show_image(self,name):
         print('\x1b[6;30;42m' +f"IMAGEM"+'\x1b[0m')
         print(name)
-        return send_from_directory(f"{getcwd()}\\temp\\",name)
-    
 
-class User:
-    def __init__(self, username, password, role):
-        self.username = username
-        self.password = password
-        self.role = role
+        return send_from_directory(f"{getcwd()}\\temp\\",name)
+    def line_monitoring(self):
+        return render_template('')
+ 
+
 
 if __name__ == '__main__':
-    #app()
+    
     print('\x1b[6;30;42m' +f"inicio"+'\x1b[0m')
     SetupUserDB()
     SetupAreasDB()

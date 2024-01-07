@@ -8,7 +8,7 @@
 <body>
 
         <h1>Area:{{area}}</h1>
-        <form action="/edit_sub_area/{{area}}/{{ subarea[1] }}" method="post">
+        <form action="/edit_sub_area/{{ subarea[1] }}" method="post">
             <label for="Name">Nome</label>
             <input name="Name" id="Name" type="text" value="{{subarea[1]}}" required>
             <br>

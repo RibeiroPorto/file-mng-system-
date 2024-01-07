@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de API</title>
+</head>
+<body>
+    <h1>Lista de Dicionários da API</h1>
+    <ul id="api-list"></ul>
+
+    <script>
+        // Função para obter dados da API
+        async function getDataFromAPI() {
+            try {
+                const response = await fetch('URL_DA_SUA_API');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Erro ao obter dados da API:', error);
+                return [];
+            }
+        }
+
+        // Função para exibir dados na página
+        async function displayData() {
+            const apiListElement = document.getElementById('api-list');
+
+            // Obtém os dados da API
+            const apiData = await getDataFromAPI();
+
+            // Limpa a lista antes de exibir os novos itens
+            apiListElement.innerHTML = '';
+
+            // Itera sobre a lista de dicionários e cria elementos li para cada um
+            apiData.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.textContent = JSON.stringify(item);
+                apiListElement.appendChild(listItem);
+            });
+        }
+
+        // Chama a função para exibir os dados ao carregar a página
+        displayData();
+    </script>
+</body>
+</html>
