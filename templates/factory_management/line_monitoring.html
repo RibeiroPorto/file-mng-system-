@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de API com Atualização Automática</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Dicionários da API</h1>
+    <table id="api-list"></table>
+
+    <script>
+        // Função para obter dados da API
+        async function getDataFromAPI() {
+            try {
+                const response = await fetch('http://127.0.0.1/current_production');
+                const data = await response.json();
+
+                return data;
+            } catch (error) {
+                console.error('Erro ao obter dados da API:', error);
+                return [];
+            }
+        }
+
+        // Função para exibir dados na página
+        async function displayData() {
+            const apiListElement = document.getElementById('api-list');
+
+            // Obtém os dados da API
+            const apiData = await getDataFromAPI();
+            console.log(apiData)
+            // Limpa a lista antes de exibir os novos itens
+            apiListElement.innerHTML = "<tr><th> ID </th><th> PN </th><th> NI </th><th> OP </th></tr>";
+            
+            cabecalho = document.createElement('tr')
+            cabecalho.appendChild = "<th> ID </th>"+"<th> PN </th>" + "<th> NI </th>" +"<th> OP </th>"
+            apiListElement.appendChild(cabecalho)
+            // Itera sobre a lista de dicionários e cria elementos li para cada um
+            apiData.forEach(item => {
+                itemID = item['id']
+                itemPN = item['pn']
+                itemNI = item['ni']
+                itemOP = item['operator']
+                const listItem = document.createElement('tr');
+                
+                listItem.innerHTML = "<td>"+itemID+"</td><td> "+itemPN + "</td><td>"+itemNI + "</td><td>"+itemOP+"</td>" //JSON.stringify(item);
+                apiListElement.appendChild(listItem);
+            });
+        }
+
+        // Chama a função para exibir os dados ao carregar a página
+        displayData();
+
+        // Atualiza os dados a cada 5 segundos
+        setInterval(displayData, 5000);
+    </script>
+</body>
+</html>
+

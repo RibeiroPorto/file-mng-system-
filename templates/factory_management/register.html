@@ -36,7 +36,7 @@
             font-weight: bold;
         }
 
-        input {
+        input, select {
             width: calc(100% - 16px);
             padding: 8px;
             margin-bottom: 10px;
@@ -76,24 +76,30 @@
 </head>
 <body>
 
-        <h1>Area:{{area}}</h1>
-        <form action="/edit_sub_area/{{area}}/{{ subarea[1] }}" method="post">
-            <label for="Name">Nome</label>
-            <input name="Name" id="Name" type="text" value="{{subarea[1]}}" required>
+        <h1>CRiar Usuario</h1>
+        <form action="/register_production" method="post">
+            <label for="partname">PN:</label>
+            <input name="partname" id="partname" type="text" required>
             <br>
             <br>
-            <label for="Description" >Descrição</label>
-            <input name="Description" id="Description" type="text"  value="{{subarea[2]}}" >
+            <label for="n_i">NI:</label>
+            <input name="n_i" id="n_i" type="text" required>
+            <br>
+            <label for="worker">Operador:</label>
+            <select name="worker" id="worker">
+                <option value="Operador_1">Operador 1</option>
+                <option value="Operador_2">Operador 2</option>
+                <option value="Operador_3">Operador 3</option>
+            </select>
             <br>
             <br>
-            <label for="file">Select a file:</label>
-            <input type="file" name="file" id="file">
-            <br>
-            
-            <br>
-            <br>
-            <button type="submit">editar</button>
+            <button type="submit">Criar</button>
         </form>
+        <br><br>
         <a href="/">Index</a>
+        <br>
+        <a href="/view_users">Ver Usuarios</a>
+        <br>
+        <a href="/login">Login</a>
 </body>
 </html>

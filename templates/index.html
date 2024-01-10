@@ -4,8 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <!-- <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #555;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        a:hover {
+            text-decoration: none;
+            background-color: #ddd;
+        }
+
+        button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c0392b;
+        }
+    </style> -->
 </head>
 <body>
+    {% include 'menu.html' %}
+
     <h1>Bem vindo, {{ username }}!</h1>
     <p>cargo: {{ role }}</p>
     <h1>Areas</h1>
@@ -21,6 +88,10 @@
     </ul>
     <br><br>
     <a href="/add_area">Adicionar Area</a>
+    <br>
+    <a href="/register_production"> Registrar produção</a>
+    <br>
+    <a href="/line_monitoring">Monitoramento de linha</a>
     <br><br>
     <a href="/logout">Sair</a>
     <br>

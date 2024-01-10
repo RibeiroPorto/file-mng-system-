@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <title>Menu Lateral</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav {
+            width: 250px;
+            height: 100vh;
+            background-color: #333;
+            color: #fff;
+            padding-top: 20px;
+            transition: width 0.3s ease;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #555;
+        }
+
+        #content {
+            flex: 1;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        #menu-toggle {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #menu-toggle i {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            a span.text {
+                display: none;
+            }
+
+            a span.icon {
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="menu">
+        <button id="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul>
+            <li><a href="/add_area"><span class="icon"><i class="fas fa-plus"></i></span><span class="text">Adicionar Área</span></a></li>
+            <li><a href="/register_production"><span class="icon"><i class="fas fa-cogs"></i></span><span class="text">Registrar Produção</span></a></li>
+            <li><a href="/line_monitoring"><span class="icon"><i class="fas fa-chart-line"></i></span><span class="text">Monitoramento de Linha</span></a></li>
+            <li><a href="/view_users"><span class="icon"><i class="fas fa-users"></i></span><span class="text">Ver Usuários</span></a></li>
+            <li><a href="/register"><span class="icon"><i class="fas fa-user-plus"></i></span><span class="text">Criar Usuários</span></a></li>
+            <li><a href="/logout"><span class="icon"><i class="fas fa-sign-out-alt"></i></span><span class="text">Sair</span></a></li>
+        </ul>
+    </nav>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            const content = document.getElementById('content');
+            menu.style.width = menu.style.width === '250px' ? '50px' : '250px';
+            content.style.marginLeft = content.style.marginLeft === '250px' ? '50px' : '250px';
+        }
+    </script>
+</body>
+</html>
