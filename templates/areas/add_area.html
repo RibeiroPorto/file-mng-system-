@@ -11,13 +11,19 @@
             margin: 0;
             padding: 0;
             display: flex;
+            
+        }
+        main{
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
             height: 100vh;
         }
-
-        form {
+        main form {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -26,7 +32,7 @@
             text-align: center;
         }
 
-        label {
+        main label {
             display: block;
             margin: 10px 0 5px;
             font-weight: bold;
@@ -50,11 +56,11 @@
             cursor: pointer;
         }
 
-        button:hover {
+        main button:hover {
             background-color: #45a049;
         }
 
-        a {
+        main a {
             margin-top: 10px;
             text-decoration: none;
             color: #333;
@@ -64,14 +70,15 @@
             border-radius: 4px;
         }
 
-        a:hover {
+        main a:hover {
             text-decoration: none;
             background-color: #ddd;
         }
     </style>
 </head>
 <body>
-
+    {% include 'menu.html' %}
+    <main>
         <h1>Criar Area</h1>
         <form action="/add_area" method="post">
             <label for="Name">Nome</label>
@@ -92,5 +99,6 @@
         <br><br>
         <a href="/">Index</a><br>
         <a href="/logout">Sair</a>
+        </main>
 </body>
 </html>

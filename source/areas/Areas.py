@@ -31,6 +31,16 @@ class Areas_app:
         self.app.add_url_rule('/delete/<string:name>','delete',self.delete_data, methods=['GET', 'POST'])
         self.app.add_url_rule('/display_image/<string:area>/<string:image>','display_image',self.display_image, methods=['GET', 'POST'])
         self.app.add_url_rule('/show_image/<string:name>','show_image',self.show_image, methods=['GET', 'POST'])
+
+        self.app.add_url_rule('/areas','areas',self.index)
+    
+    def index(self):
+        if 'username' not in session:
+            return redirect(url_for('login'))
+        else:
+            areas = self.area_management.showAll()
+            session['current_page']='Areas'
+            return render_template('areas/areas.html', username=session['username'], role=session['role'], areas=areas, current_page= session['current_page'])
         
     def AddArea(self):
         if 'role' in session and session['role'] != "Manager":

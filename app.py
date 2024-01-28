@@ -5,64 +5,23 @@ from source.users.Users import Users_app
 from source.areas.Areas_db import SetupAreasDB, AreasManagement
 from source.areas.Areas import Areas_app
 from config.KEY import key
+from source.factory_mng.factory_management import factory_management
+from source.product_development.product_development import Product_development
 
 app = Flask(__name__)
 app.secret_key = key
 
 
-from source.factory_mng.factory_db import SetupFactoryDB, ProductionRegistry
-import json
-
-class factory_management:
-    def __init__(self,app):
-        self.app = app
-        SetupFactoryDB()
-        self.production_registry =ProductionRegistry()
-
-    def setup_routes(self):
-        self.app.add_url_rule('/line_monitoring','line_monitoring',self.line_monitoring, methods=['GET','POST'])
-        self.app.add_url_rule('/register_production','register_production', self.register_production, methods=['GET','POST'])
-        self.app.add_url_rule('/current_production','current_production', self.current_production, methods=['GET','POST'])
-
-    def line_monitoring(self):
-        return render_template('factory_management/line_monitoring.html')
-    
-    def register_production(self):
-        if request.method == 'POST':
-            PartName = request.form['partname']
-            NI = request.form['n_i']
-            Operador = request.form['worker']
-
-            self.production_registry.addOne(PartName,NI,Operador)
-            self.current_production()
-        return render_template('factory_management/register.html') 
-    
-    def current_production(self):
-        current_data = self.production_registry.showAll()
-
-        keys = ['id', 'pn', 'ni', 'operator']
-
-        dict_list = [dict(zip(keys, tpl)) for tpl in current_data]
-
-        j_str = json.dumps(dict_list)
-
-        
-        return j_str
-       
-
-    
-    
 
 class FlaskApp:
 
     def __init__(self):
         self.area_management = AreasManagement()
-
         self.app = app
         self.users = Users_app(self.app)
         self.areas = Areas_app(self.app)
-        
         self.factory = factory_management(self.app)
+        self.product_dev = Product_development(self.app)
 
         self.setup_routes()
         
@@ -70,8 +29,11 @@ class FlaskApp:
         self.users.setup_routes()
         self.areas.setup_routes()
         self.factory.setup_routes()
+        self.product_dev.setup_routes()
+
         
         self.app.add_url_rule('/','index',self.index)
+        self.app.add_url_rule('/configuracoes','configuracoes', self.configuration_panel)
 
   
     #pages
@@ -79,10 +41,13 @@ class FlaskApp:
         if 'username' not in session:
             return redirect(url_for('login'))
         else:
-            areas = self.area_management.showAll()
+            session['current_page']= 'Index'
             
-            return render_template('index.html', username=session['username'], role=session['role'], areas=areas)
+            return render_template('index.html', username=session['username'], role=session['role'], current_page= session['current_page'])
 
+    def configuration_panel(self):
+        session['current_page']= 'Configuration Panel'
+        return render_template('config_panel.html', username=session['username'], current_page= session['current_page'])
 
 
 if __name__ == '__main__':

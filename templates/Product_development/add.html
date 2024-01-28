@@ -1,0 +1,278 @@
+<!-- templates/create_project.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Project</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        main {
+            width: 100%;
+            height: 100vh;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+
+        n.av {
+            width: 250px;
+            height: 100vh;
+            background-color: #007bff;
+            color: #fff;
+            padding-top: 20px;
+            transition: width 0.3s ease;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+
+        #content {
+            flex: 1;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        #menu-toggle {
+            background-color: #0056b3;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #menu-toggle i {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            a span.text {
+                display: none;
+            }
+
+            a span.icon {
+                display: inline-block;
+            }
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        form {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        input,
+        textarea,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #floating-window-pns, #floating-window-dados {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'menu.html' %}
+    <main>
+        <h1>Create Project</h1>
+
+        <form action="" method="post">
+            <div class="main-informarion">
+                <label for="ID">ID:</label>
+                <input type="number" id="ID" value="10" name="DB_ID" disabled><input type="number" name="ID"><br>
+
+                <label for="project_name">Project Name:</label>
+                <input type="text" id=project_name name="project_name"><br>
+
+                <label for="project_description">Project Description:</label>
+                <textarea id="project_description" name="project_description" rows="4"></textarea><br>
+            </div>
+
+            <div class="PN_N_Description" style="">
+                <div>
+                    <h1>PNs</h1>
+                    <label for="start_date">PN:</label>
+                    <input type="text" id="start_date" name="start_date"><br>
+
+                </div>
+                <div style="align-self: flex-end;">
+                    <button onclick="add_info()" >+</button><button onclick="remove_field()">-</button>
+
+
+                    <div id="floating-window-pns">
+                        <p>Nome</p> <input id="name" type="text">
+                        <p>Tipo</p><select name="tipo" id="tipo">
+                            <option value="texto">texto</option>
+                            <option value="data">data</option>
+                            <option value="check">check</option>
+                        </select>
+                        <br>
+                        <button onclick="hideFloatingWindow()">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="Dados" style=";">
+                <div>
+                    <h1>Dados</h1>
+                    <label for="start_date">PN:</label>
+                    <input type="text" id="start_date" name="start_date"><br>
+
+                </div>
+                <div style="align-self: flex-end;">
+                    <button onclick="add_info()">+</button><button onclick="remove_field()" >-</button>
+
+
+                    <div id="floating-window-dados">
+                        <p>Nome</p> <input id="name" type="text">
+                        <p>Tipo</p><select name="tipo" id="tipo">
+                            <option value="texto">texto</option>
+                            <option value="data">data</option>
+                            <option value="check">check</option>
+                        </select>
+                        <br>
+                        <button onclick="hideFloatingWindow()">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <script>
+
+
+        function add_info() {
+            event.preventDefault()
+            
+            const button = event.target
+            const window = button.parentElement.children[2]
+            console.log(window,'adsf')
+            // if(section=="pns"){
+            //     const window = document.getElementById('floating-window-pns');
+            // }else if(section =='dados'){
+            //     const window = document.getElementById('floating-window-dados');
+            // }
+            
+
+            // Posiciona a janela flutuante próximo ao botão
+            const buttonRect = button.getBoundingClientRect();
+            window.style.top = `${buttonRect.bottom}px`;
+            window.style.left = `${buttonRect.left}px`;
+
+            // Exibe a janela flutuante
+            window.style.display = 'block';
+            console.log('.')
+        }
+
+        function hideFloatingWindow() {
+
+            event.preventDefault()
+            doc = event.target.parentElement
+            console.log(doc)
+            const window = event.target.parentElement;
+            const nome = window.children[1].value
+            const tipo = window.children[3].value
+
+            const section = window.parentElement.parentElement.children[0]
+            if (tipo === "texto") {
+                element = `<div name="${nome}"><label name="${nome}">${nome}:</label>
+                <input type="text" " name="${nome}"><br><div>`
+            } else if (tipo === "data") {
+                element = `<div name="${nome}"><label name="${nome}">${nome}:</label>
+                <input type="date" " name="${nome}"><br><div>`
+            } else {
+                element = `<div name="${nome}"><label name="${nome}">${nome}:</label>
+                <input type="checkbox" " name="${nome}"><br><div>`
+            }
+            
+
+            section.innerHTML += element
+
+            window.style.display = 'none';
+        }
+        function remove_field(){
+            event.preventDefault()
+            section = event.target.parentElement.parentElement.children[0]
+            
+            fields_list = []
+            for(var item of section.children){
+                if (item.tagname == "DIV"){
+                    fields_list.push(item)
+                    console.log(item)
+                }
+                console.log(item.tagName,item.getAttribute('name'))
+
+            }
+            console.log(fields_list)
+        }
+
+    </script>
+</body>
+
+</html>

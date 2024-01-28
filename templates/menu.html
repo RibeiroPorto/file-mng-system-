@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <title>Menu Lateral</title>
     <style>
-        body {
+        section.side-menu {
             font-family: 'Arial', sans-serif;
             background-color: #f2f2f2;
             margin: 0;
@@ -14,45 +15,64 @@
             display: flex;
         }
 
-        nav {
-            width: 250px;
+        nav.side-menu {
+            width: 220px;
             height: 100vh;
             background-color: #333;
             color: #fff;
             padding-top: 20px;
-            transition: width 0.3s ease;
+            transition: width 0.4s ease;
         }
-
-        ul {
+        button.side-menu{
+            width: 100%;
+            height: 3em;
+            text-align: center;
+            
+        }
+        button.side-menu svg.svg-inline--fa.fa-w-14 {
+            height: 2em;
+            width: 2em;
+        }
+        button.side-menu.hide {
+            text-align: center;
+            
+        }
+        ul.side-menu {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
 
-        li {
+        li.side-menu {
             margin-bottom: 10px;
         }
-
-        a {
+        li.side-menu.show{
+            background-color: rgba(0,0,0,0.4);
+        }
+        a.side-menu {
             text-decoration: none;
             color: #fff;
             padding: 10px;
             display: flex;
             align-items: center;
             transition: background-color 0.3s ease;
+            text-align: center;
         }
 
-        a:hover {
+        a.side-menu:hover {
             background-color: #555;
+            
         }
-
-        #content {
+        .icon.side-menu{
+            margin: 5px;
+        }
+        #content.side-menu {
             flex: 1;
             padding: 20px;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.5s ease-in-out;
         }
 
-        #menu-toggle {
+        #menu-toggle.side-menu {
             background-color: #333;
             border: none;
             color: #fff;
@@ -60,34 +80,129 @@
             cursor: pointer;
             font-size: 16px;
         }
+        #menu-toggle.side-menu.hide{
+            padding:8px 10px 10px 8px;
+        }
 
-        #menu-toggle i {
+        #menu-toggle.side-menu i {
             margin-right: 10px;
         }
 
+        .side-menu .text.hide{
+            display:none;
+            transition: ease-in-out 1s;
+
+        }
+
+        #menu.side-menu.hide{
+            width:50px;
+        }
+
         @media (max-width: 768px) {
-            a span.text {
+            a.side-menu span.text {
                 display: none;
             }
 
-            a span.icon {
+            a.side-menu span.icon {
                 display: inline-block;
             }
         }
     </style>
 </head>
+
 <body>
-    <nav id="menu">
-        <button id="menu-toggle" onclick="toggleMenu()">
+    <section class="side-menu">
+    <nav id="menu" class="side-menu hide">
+        <button class="side-menu hide" id="menu-toggle" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
         </button>
-        <ul>
-            <li><a href="/add_area"><span class="icon"><i class="fas fa-plus"></i></span><span class="text">Adicionar Área</span></a></li>
-            <li><a href="/register_production"><span class="icon"><i class="fas fa-cogs"></i></span><span class="text">Registrar Produção</span></a></li>
-            <li><a href="/line_monitoring"><span class="icon"><i class="fas fa-chart-line"></i></span><span class="text">Monitoramento de Linha</span></a></li>
-            <li><a href="/view_users"><span class="icon"><i class="fas fa-users"></i></span><span class="text">Ver Usuários</span></a></li>
-            <li><a href="/register"><span class="icon"><i class="fas fa-user-plus"></i></span><span class="text">Criar Usuários</span></a></li>
-            <li><a href="/logout"><span class="icon"><i class="fas fa-sign-out-alt"></i></span><span class="text">Sair</span></a></li>
+        <ul class="side-menu">
+            {%if current_page != 'Index' %}
+            <li class="side-menu">
+                <a class="side-menu" href="/">
+                    <span class="icon side-menu"><i class="fas fa-home"></i></span>
+                    <span class="text hide "> Pagina inicial</span>
+                </a>
+            </li>
+            {% endif %}
+            {%if current_page != 'Produção' %}
+            <li class="side-menu">
+                <a class="side-menu" href="/producao">
+                    <span class="icon side-menu"><i class="fas fa-industry"></i></span>
+                    <span class="text hide "> Produção </span>
+                </a>
+            </li>
+            {% endif %}
+
+            {%if current_page != 'Areas' %}
+            <li class="side-menu">
+                <a class="side-menu" href="/areas">
+                    <span class="icon side-menu"><i class="fas fa-folder"></i></span>
+                    <span class="text hide "> Documentações</span>
+                </a>
+            </li>
+            {% endif %}
+            {%if current_page != 'Configuration Panel' %}
+            <li class="side-menu">
+                <a class="side-menu" href="/configuracoes">
+                    <span class="icon side-menu"><i class="fas fa-wrench"></i></span>
+                    <span class="text hide "> Configurações</span>
+                </a>
+            </li>
+            {% endif %}
+            {%if current_page != 'Product_dev' %}
+            <li class="side-menu">
+                <a class="side-menu" href="/desenvolvimento">
+                    <span class="icon side-menu"><i class="fas fa-cubes"></i></span>
+                    <span class="text hide "> Desenvolvimento</span>
+                </a>
+            </li>
+            {% endif %}
+            {%if current_page == 'Areas' %}
+            <li class="side-menu show">
+                <a class="side-menu" href="/add_area">
+                    <span class="icon side-menu"><i class="fas fa-plus"></i></span>
+                    <span class="text hide "> Adicionar Área</span>
+                </a>
+            </li>
+            {% endif %}
+            {%if current_page == 'Produção' %}
+            <li class="side-menu show">
+                <a class="side-menu" href="/register_production">
+                    <span class="icon side-menu"><i class="fas fa-cogs"></i>
+                    </span>
+                    <span class="text hide">Registrar Produção</span>
+                </a>
+            </li>
+            <li class="side-menu show">
+                <a class="side-menu" href="/line_monitoring">
+                    <span class="icon side-menu"><i class="fas fa-chart-line"></i>
+                    </span>
+                    <span class="text hide">Monitoramento de Linha</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            {%if current_page == 'Configuration Panel' %}
+            <li class="side-menu show">
+                <a class="side-menu" href="/view_users">
+                    <span class="icon side-menu"><i class="fas fa-users"></i></span>
+                    <span class="text hide">Ver Usuários</span>
+                </a>
+            </li>
+            <li class="side-menu show">
+                <a class="side-menu" href="/register">
+                    <span class="icon side-menu"><i class="fas fa-user-plus"></i></span>
+                    <span class="text hide">Criar Usuários</span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="side-menu">
+                <a class="side-menu " href="/logout">
+                    <span class="icon side-menu"><i class="fas fa-sign-out-alt"></i></span>
+                    <span class="text hide">Sair</span>
+                </a>
+            </li>
         </ul>
     </nav>
 
@@ -95,10 +210,19 @@
     <script>
         function toggleMenu() {
             const menu = document.getElementById('menu');
-            const content = document.getElementById('content');
-            menu.style.width = menu.style.width === '250px' ? '50px' : '250px';
-            content.style.marginLeft = content.style.marginLeft === '250px' ? '50px' : '250px';
+            const textMenu = document.querySelectorAll('.side-menu .text');
+            const button = document.querySelector('button.side-menu')
+            //menu.style.width = menu.style.width === '250px' ? '50px' : '250px';
+            menu.classList.toggle('hide')
+            button.classList.toggle('hide')
+            textMenu.forEach( item => {
+                item.classList.toggle('hide')
+            })
+            
         }
+        
     </script>
+    </section>
 </body>
+
 </html>
