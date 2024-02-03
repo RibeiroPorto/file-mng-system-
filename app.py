@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file, send_from_directory, render_template_string
+from flask_cors import CORS
 
 from source.users.Users_db import SetupUserDB
 from source.users.Users import Users_app
@@ -11,6 +12,7 @@ from source.product_development.product_development import Product_development
 app = Flask(__name__)
 app.secret_key = key
 
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 
 class FlaskApp:
@@ -34,7 +36,8 @@ class FlaskApp:
         
         self.app.add_url_rule('/','index',self.index)
         self.app.add_url_rule('/configuracoes','configuracoes', self.configuration_panel)
-
+        
+        
   
     #pages
     def index(self):
@@ -48,8 +51,7 @@ class FlaskApp:
     def configuration_panel(self):
         session['current_page']= 'Configuration Panel'
         return render_template('config_panel.html', username=session['username'], current_page= session['current_page'])
-
-
+    
 if __name__ == '__main__':
     
     print('\x1b[6;30;42m' +f"inicio"+'\x1b[0m')
